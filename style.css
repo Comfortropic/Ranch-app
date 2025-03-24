@@ -1,39 +1,35 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 20px;
   background-color: #121212;
-  color: #ffffff;
+  color: #fff;
 }
 
-h1, h2 {
+h2 {
   text-align: center;
 }
 
-form, section {
+.screen {
+  display: none;
   max-width: 600px;
   margin: 20px auto;
-  background: #1e1e1e;
   padding: 20px;
+  background: #1e1e1e;
   border-radius: 5px;
 }
 
-label {
+.screen.active {
   display: block;
-  margin: 10px 0 5px;
 }
 
-input[type="text"],
-input[type="number"],
-textarea,
-select {
+input, select, textarea {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
+  margin: 10px 0;
   border: 1px solid #333;
   border-radius: 3px;
-  background-color: #2a2a2a;
+  background: #2a2a2a;
   color: #fff;
 }
 
@@ -42,11 +38,57 @@ button {
   margin: 10px 5px 0 0;
   border: none;
   background-color: #0d47a1;
-  color: #ffffff;
+  color: #fff;
   cursor: pointer;
   border-radius: 3px;
 }
 
 button:hover {
   background-color: #1565c0;
+}
+
+.error {
+  color: #F44336;
+  font-weight: bold;
+}
+
+/* Digital Keyboard Styles */
+#digital-keyboard {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2a2a2a;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#digital-keyboard.hidden {
+  display: none;
+}
+
+.keyboard-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.key {
+  width: 60px;
+  height: 60px;
+  margin: 5px;
+  font-size: 20px;
+  background: #0d47a1;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.key:hover {
+  background: #1565c0;
 }

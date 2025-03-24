@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rancher Calf Data PWA</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <div id="app">
+    <!-- Unique ID Entry Screen -->
+    <section id="screen-unique-id" class="screen active">
+      <h2>Enter Calf Unique ID</h2>
+      <input type="text" id="calf-id" placeholder="USXXXXX" />
+      <button id="check-duplicate">Check Duplicate</button>
+      <button id="next-from-unique">Next Step</button>
+      <button id="comment-unique">Add Comment</button>
+      <div class="error" id="error-unique"></div>
+    </section>
+
+    <!-- Data Entry Screen -->
+    <section id="screen-data-entry" class="screen">
+      <h2>Calf Data Entry</h2>
+      <input type="number" id="calf-weight" placeholder="Weight (kg)" />
+      <input type="number" id="calf-height" placeholder="Height (cm)" />
+      <input type="number" id="calf-age" placeholder="Age (days)" />
+      <input type="text" id="mother-id" placeholder="Mother ID" />
+      <button id="next-from-data">Next Step</button>
+      <button id="prev-from-data">Step Back</button>
+      <button id="comment-data">Add Comment</button>
+      <div class="error" id="error-data"></div>
+    </section>
+
+    <!-- Multiple Choice Screen -->
+    <section id="screen-multiple-choice" class="screen">
+      <h2>Additional Info</h2>
+      <label>Calving Ease (1-5):</label>
+      <input type="range" id="calving-ease" min="1" max="5" value="3" />
+      <label>Sex:</label>
+      <select id="calf-sex">
+        <option value="">Select Sex</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      <label>Breed:</label>
+      <select id="calf-breed">
+        <!-- Options populated dynamically -->
+      </select>
+      <button id="next-from-mc">Next Step</button>
+      <button id="prev-from-mc">Step Back</button>
+      <button id="comment-mc">Add Comment</button>
+      <div class="error" id="error-mc"></div>
+    </section>
+
+    <!-- Customization Screen -->
+    <section id="screen-customization" class="screen">
+      <h2>Customization</h2>
+      <label>Breed List (comma-separated):</label>
+      <input type="text" id="custom-breeds" placeholder="e.g., Angus, Hereford, Charolais" />
+      <button id="save-breeds">Save Breeds</button>
+      <label>Language:</label>
+      <select id="language-selector">
+        <option value="English">English</option>
+        <option value="Español">Español</option>
+      </select>
+      <button id="save-language">Save Language</button>
+      <button id="download-data">Download Data</button>
+      <button id="prev-from-custom">Step Back</button>
+    </section>
+  </div>
+
+  <!-- Digital Keyboard for Numeric Entry -->
+  <div id="digital-keyboard" class="hidden">
+    <div class="keyboard-row">
+      <button class="key">1</button>
+      <button class="key">2</button>
+      <button class="key">3</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="key">4</button>
+      <button class="key">5</button>
+      <button class="key">6</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="key">7</button>
+      <button class="key">8</button>
+      <button class="key">9</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="key">0</button>
+      <button class="key" id="key-delete">Del</button>
+      <button class="key" id="key-enter">Enter</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Register the service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').then(reg => {
+          console.log('ServiceWorker registered with scope:', reg.scope);
+        }).catch(err => console.error('ServiceWorker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

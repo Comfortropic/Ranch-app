@@ -20,14 +20,12 @@ self.addEventListener('install', function (event) {
 self.addEventListener('fetch', function (event) {
   event.respondWith(
     caches.match(event.request).then(function (response) {
-      // Return cached response if found, else fetch from network.
       return response || fetch(event.request);
     })
   );
 });
 
 self.addEventListener('activate', function (event) {
-  // Clean up any old caches.
   event.waitUntil(
     caches.keys().then(function (cacheNames) {
       return Promise.all(

@@ -164,10 +164,12 @@ function checkDuplicate(callback) {
     document.getElementById("error-unique").textContent = "Calf ID cannot be empty.";
     return;
   }
+  console.log("Checking duplicate for ID:", id);
   let transaction = db.transaction("calfEntries", "readonly");
   let store = transaction.objectStore("calfEntries");
   let request = store.get(id);
   request.onsuccess = function () {
+    console.log("Duplicate check result:", request.result);
     if (request.result) {
       document.getElementById("error-unique").textContent = "Duplicate ID found!";
     } else {
@@ -176,7 +178,8 @@ function checkDuplicate(callback) {
     }
   };
   request.onerror = function () {
-    console.error("Error checking duplicate.");
+    console.error("Error checking duplicate. Proceeding anyway.");
+    callback();
   };
 }
 

@@ -8,65 +8,54 @@
   <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <div id="app">
-    <!-- Unique ID Entry Screen -->
-    <section id="unique-id-screen" class="screen active">
-      <h2>Enter Calf Unique ID</h2>
-      <input type="text" id="calf-id" placeholder="Enter Calf ID" />
-      <button id="check-duplicate">Check Duplicate</button>
-      <button id="to-data-entry">Next</button>
-      <div id="id-error" class="error"></div>
-      <button id="add-comment-uid" class="comment-btn">Add Comment</button>
-    </section>
+  <h1>Rancher Calf Data PWA</h1>
 
-    <!-- Data Entry Screen -->
-    <section id="data-entry-screen" class="screen">
-      <h2>Calf Data Entry</h2>
-      <input type="number" id="weight" placeholder="Weight (kg)" />
-      <input type="number" id="height" placeholder="Height (cm)" />
-      <input type="number" id="age" placeholder="Age (days)" />
-      <select id="mother-id">
-        <option value="">Select Mother ID</option>
-      </select>
-      <button id="save-data">Save Data</button>
-      <button id="add-comment-data" class="comment-btn">Add Comment</button>
-      <button id="to-multiple-choice">Next</button>
-      <div id="data-error" class="error"></div>
-    </section>
+  <!-- Calf Data Entry Form -->
+  <form id="calf-form">
+    <h2>Enter Calf Data</h2>
+    
+    <label for="calf-id">Calf ID:</label>
+    <input type="text" id="calf-id" placeholder="Unique Calf ID" required />
 
-    <!-- Multiple Choice Screen -->
-    <section id="multiple-choice-screen" class="screen">
-      <h2>Additional Info</h2>
-      <label for="calving-ease">Calving Ease (1-5):</label>
-      <input type="range" id="calving-ease" min="1" max="5" value="3" />
-      <select id="sex">
-        <option value="">Select Sex</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-      <select id="breed">
-        <option value="">Select Breed</option>
-      </select>
-      <button id="save-multiple-choice">Save</button>
-      <button id="add-comment-mc" class="comment-btn">Add Comment</button>
-      <div id="mc-error" class="error"></div>
-    </section>
+    <label for="calf-weight">Weight (kg):</label>
+    <input type="number" id="calf-weight" placeholder="Enter weight" required />
 
-    <!-- Customization Screen -->
-    <section id="customization-screen" class="screen">
-      <h2>Customize Settings</h2>
-      <h3>Breed List</h3>
-      <ul id="breed-list"></ul>
-      <input type="text" id="new-breed" placeholder="Add new breed" />
-      <button id="add-breed">Add Breed</button>
-      <h3>Language</h3>
-      <select id="language-selector">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-      </select>
-      <button id="save-customization">Save Settings</button>
-    </section>
-  </div>
+    <label for="calf-height">Height (cm):</label>
+    <input type="number" id="calf-height" placeholder="Enter height" required />
+
+    <label for="calf-age">Age (days):</label>
+    <input type="number" id="calf-age" placeholder="Enter age" required />
+
+    <label for="mother-id">Mother ID:</label>
+    <input type="text" id="mother-id" placeholder="Enter Mother ID" required />
+
+    <label for="calf-breed">Breed:</label>
+    <select id="calf-breed">
+      <!-- Options will be populated by app.js -->
+    </select>
+
+    <label for="calf-comment">Additional Comments:</label>
+    <textarea id="calf-comment" placeholder="Enter any comments"></textarea>
+
+    <button type="button" id="save-calf">Save Calf Data</button>
+  </form>
+
+  <!-- Customization Section -->
+  <section id="customization">
+    <h2>Customization Settings</h2>
+    <label for="custom-breeds">Breed List (comma-separated):</label>
+    <input type="text" id="custom-breeds" placeholder="e.g., Angus, Hereford, Charolais" />
+    <button type="button" id="save-breeds">Save Breeds</button>
+
+    <label for="language-selector">Language:</label>
+    <select id="language-selector">
+      <option value="English">English</option>
+      <option value="Español">Español</option>
+      <!-- Add more languages if needed -->
+    </select>
+    <button type="button" id="save-language">Save Language</button>
+  </section>
+
   <script src="app.js"></script>
   <script>
     // Register the service worker for offline capabilities
@@ -74,13 +63,10 @@
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('service-worker.js').then(
           function (registration) {
-            console.log(
-              'ServiceWorker registration successful with scope: ',
-              registration.scope
-            );
+            console.log('ServiceWorker registered with scope:', registration.scope);
           },
           function (err) {
-            console.log('ServiceWorker registration failed: ', err);
+            console.log('ServiceWorker registration failed:', err);
           }
         );
       });

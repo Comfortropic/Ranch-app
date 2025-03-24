@@ -1,55 +1,76 @@
+/* Overall Page Styling */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
-  padding: 20px;
-  background-color: #121212;
+  padding: 0;
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
   color: #fff;
 }
 
-h2 {
-  text-align: center;
-}
-
+/* Screen Container Styling */
 .screen {
   display: none;
   max-width: 600px;
-  margin: 20px auto;
+  margin: 30px auto;
   padding: 20px;
-  background: #1e1e1e;
-  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .screen.active {
   display: block;
 }
 
+/* Input and Select Styling */
 input, select, textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin: 10px 0;
-  border: 1px solid #333;
-  border-radius: 3px;
-  background: #2a2a2a;
-  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 10px 5px 0 0;
+/* Button Group and Action Buttons */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  flex: 1 1 30%;
+  margin: 5px;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: bold;
   border: none;
-  background-color: #0d47a1;
+  border-radius: 5px;
+  background: #FF9800;
   color: #fff;
   cursor: pointer;
-  border-radius: 3px;
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background-color: #1565c0;
+.action-btn:hover {
+  background: #F57C00;
 }
 
+.small-btn {
+  flex: 1 1 25%;
+  background: #4CAF50;
+}
+
+.small-btn:hover {
+  background: #43A047;
+}
+
+/* Error Messages */
 .error {
   color: #F44336;
-  font-weight: bold;
+  font-size: 16px;
+  margin-top: 5px;
 }
 
 /* Digital Keyboard Styles */
@@ -87,6 +108,7 @@ button:hover {
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .key:hover {

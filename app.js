@@ -1,4 +1,4 @@
-// Global variables and temporary storage for comments
+// Global Variables and Temporary Comment Storage
 const DB_NAME = "calfDataDB";
 const DB_VERSION = 1;
 let db;
@@ -24,13 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function initDB() {
   let request = indexedDB.open(DB_NAME, DB_VERSION);
   request.onupgradeneeded = function (event) {
-    let db = event.target.result;
-    if (!db.objectStoreNames.contains("calfEntries")) {
-      let store = db.createObjectStore("calfEntries", { keyPath: "id" });
+    let database = event.target.result;
+    if (!database.objectStoreNames.contains("calfEntries")) {
+      let store = database.createObjectStore("calfEntries", { keyPath: "id" });
       store.createIndex("by_date", "date", { unique: false });
     }
-    if (!db.objectStoreNames.contains("settings")) {
-      db.createObjectStore("settings", { keyPath: "key" });
+    if (!database.objectStoreNames.contains("settings")) {
+      database.createObjectStore("settings", { keyPath: "key" });
     }
   };
   request.onsuccess = function (event) {
@@ -51,14 +51,17 @@ function showScreen(screenId) {
 
 function setupScreenNavigation() {
   document.getElementById("next-from-unique").addEventListener("click", () => {
-    // First check for duplicates before moving on
+    if (!db) {
+      alert("Database not ready; proceeding without duplicate check.");
+      showScreen("screen-data-entry");
+      return;
+    }
     checkDuplicate(() => showScreen("screen-data-entry"));
   });
   document.getElementById("prev-from-data").addEventListener("click", () => {
     showScreen("screen-unique-id");
   });
   document.getElementById("next-from-data").addEventListener("click", () => {
-    // Basic validation for data entry screen
     if (validateDataEntry()) {
       showScreen("screen-multiple-choice");
     }
@@ -78,7 +81,7 @@ function setupScreenNavigation() {
 // Event Listeners Setup  //
 ////////////////////////////
 function setupEventListeners() {
-  // Comment functionality: prompt user and store comment
+  // Comment Functionality: Prompt user and store comment
   document.getElementById("comment-unique").addEventListener("click", () => {
     const comment = prompt("Enter comment for Unique ID Screen:");
     if (comment) {
@@ -100,24 +103,24 @@ function setupEventListeners() {
       alert("Comment saved.");
     }
   });
-  // Breed and Language customization
+  
+  // Breed and Language Customization
   document.getElementById("save-breeds").addEventListener("click", saveBreeds);
   document.getElementById("save-language").addEventListener("click", saveLanguage);
-  // JSON Export button for Download Data
+  // JSON Export for Download Data
   document.getElementById("download-data").addEventListener("click", exportData);
-  // Duplicate check button
+  // Duplicate Check Button
   document.getElementById("check-duplicate").addEventListener("click", () => {
     checkDuplicate(() => alert("No duplicate found."));
   });
   
-  // Set up focus listeners for digital keyboard on numeric inputs
+  // Digital Keyboard Focus for Numeric Inputs
   document.querySelectorAll('input[type="number"]').forEach(input => {
     input.addEventListener("focus", () => {
       focusedInput = input;
       showDigitalKeyboard();
     });
     input.addEventListener("blur", () => {
-      // Delay hiding to allow keyboard button click processing
       setTimeout(hideDigitalKeyboard, 100);
     });
   });
@@ -152,9 +155,9 @@ function hideDigitalKeyboard() {
   document.getElementById("digital-keyboard").classList.add("hidden");
 }
 
-///////////////////////////
+//////////////////////////
 // Duplicate Check Logic //
-///////////////////////////
+//////////////////////////
 function checkDuplicate(callback) {
   const id = document.getElementById("calf-id").value.trim();
   if (!id) {
@@ -189,136 +192,4 @@ function validateDataEntry() {
   
   if (!weight || weight <= 0) errorMsg += "Weight must be a positive number. ";
   if (!height || height <= 0) errorMsg += "Height must be a positive number. ";
-  if (!age || age <= 0) errorMsg += "Age must be a positive number. ";
-  if (!motherId) errorMsg += "Mother ID is required.";
-  
-  document.getElementById("error-data").textContent = errorMsg;
-  return errorMsg === "";
-}
-
-/////////////////////////////
-// Save Calf Data Function //
-/////////////////////////////
-function saveCalfEntry() {
-  const id = document.getElementById("calf-id").value.trim();
-  if (!id) {
-    alert("Calf ID is required.");
-    return;
-  }
-  // Gather all data from different screens
-  const entry = {
-    id,
-    weight: document.getElementById("calf-weight").value,
-    height: document.getElementById("calf-height").value,
-    age: document.getElementById("calf-age").value,
-    motherId: document.getElementById("mother-id").value,
-    sex: document.getElementById("calf-sex").value,
-    calvingEase: document.getElementById("calving-ease").value,
-    breed: document.getElementById("calf-breed").value,
-    comments: {
-      unique: tempComments.unique,
-      data: tempComments.data,
-      multipleChoice: tempComments.multipleChoice
-    },
-    date: new Date().toISOString()
-  };
-  let transaction = db.transaction("calfEntries", "readwrite");
-  let store = transaction.objectStore("calfEntries");
-  store.put(entry);
-  transaction.oncomplete = () => {
-    alert("Calf data saved successfully!");
-  };
-}
-
-//////////////////////////////
-// Customization Functions  //
-//////////////////////////////
-function loadCustomizationSettings() {
-  let transaction = db.transaction("settings", "readonly");
-  let store = transaction.objectStore("settings");
-
-  let breedRequest = store.get("breeds");
-  breedRequest.onsuccess = function () {
-    let breeds = breedRequest.result ? breedRequest.result.value : ["Angus", "Hereford", "Charolais"];
-    populateBreedDropdown(breeds);
-  };
-
-  let langRequest = store.get("language");
-  langRequest.onsuccess = function () {
-    let lang = langRequest.result ? langRequest.result.value : "English";
-    document.getElementById("language-selector").value = lang;
-  };
-}
-
-function saveBreeds() {
-  let newBreeds = document.getElementById("custom-breeds").value.split(",").map(b => b.trim());
-  let transaction = db.transaction("settings", "readwrite");
-  let store = transaction.objectStore("settings");
-  store.put({ key: "breeds", value: newBreeds });
-  transaction.oncomplete = () => {
-    alert("Breed list updated!");
-    populateBreedDropdown(newBreeds);
-  };
-}
-
-function populateBreedDropdown(breeds) {
-  let dropdown = document.getElementById("calf-breed");
-  dropdown.innerHTML = breeds.map(breed => `<option value="${breed}">${breed}</option>`).join("");
-}
-
-function saveLanguage() {
-  let language = document.getElementById("language-selector").value;
-  let transaction = db.transaction("settings", "readwrite");
-  let store = transaction.objectStore("settings");
-  store.put({ key: "language", value: language });
-  transaction.oncomplete = () => {
-    alert(`Language set to ${language}`);
-  };
-}
-
-//////////////////////////
-// Offline Sync Function//
-//////////////////////////
-function syncData() {
-  console.log("Network online. Attempting to sync data...");
-  // For each entry in IndexedDB, send to server (simulate with a log)
-  let transaction = db.transaction("calfEntries", "readonly");
-  let store = transaction.objectStore("calfEntries");
-  store.openCursor().onsuccess = function (event) {
-    let cursor = event.target.result;
-    if (cursor) {
-      // Simulate sync - in a real app, you'd use fetch() to send data
-      console.log("Syncing entry:", cursor.value);
-      cursor.continue();
-    } else {
-      console.log("All entries checked for sync.");
-    }
-  };
-}
-
-/////////////////////////////
-// JSON Export Functionality//
-/////////////////////////////
-function exportData() {
-  let transaction = db.transaction("calfEntries", "readonly");
-  let store = transaction.objectStore("calfEntries");
-  let allData = [];
-  store.openCursor().onsuccess = function (event) {
-    let cursor = event.target.result;
-    if (cursor) {
-      allData.push(cursor.value);
-      cursor.continue();
-    } else {
-      let dataStr = JSON.stringify(allData, null, 2);
-      let blob = new Blob([dataStr], { type: "application/json" });
-      let url = URL.createObjectURL(blob);
-      let a = document.createElement("a");
-      a.href = url;
-      a.download = "calf_data.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  };
-}
+  if (!age || age

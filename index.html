@@ -13,9 +13,11 @@
     <section id="screen-unique-id" class="screen active">
       <h2>Enter Calf Unique ID</h2>
       <input type="text" id="calf-id" placeholder="USXXXXX" />
-      <button id="check-duplicate">Check Duplicate</button>
-      <button id="next-from-unique">Next Step</button>
-      <button id="comment-unique">Add Comment</button>
+      <div class="button-group">
+        <button id="check-duplicate" class="action-btn">Check Duplicate</button>
+        <button id="next-from-unique" class="action-btn">Next Step</button>
+        <button id="comment-unique" class="action-btn small-btn">Add Comment</button>
+      </div>
       <div class="error" id="error-unique"></div>
     </section>
 
@@ -26,9 +28,11 @@
       <input type="number" id="calf-height" placeholder="Height (cm)" />
       <input type="number" id="calf-age" placeholder="Age (days)" />
       <input type="text" id="mother-id" placeholder="Mother ID" />
-      <button id="next-from-data">Next Step</button>
-      <button id="prev-from-data">Step Back</button>
-      <button id="comment-data">Add Comment</button>
+      <div class="button-group">
+        <button id="prev-from-data" class="action-btn">Step Back</button>
+        <button id="next-from-data" class="action-btn">Next Step</button>
+        <button id="comment-data" class="action-btn small-btn">Add Comment</button>
+      </div>
       <div class="error" id="error-data"></div>
     </section>
 
@@ -45,11 +49,13 @@
       </select>
       <label>Breed:</label>
       <select id="calf-breed">
-        <!-- Options populated dynamically -->
+        <!-- Options will be populated dynamically -->
       </select>
-      <button id="next-from-mc">Next Step</button>
-      <button id="prev-from-mc">Step Back</button>
-      <button id="comment-mc">Add Comment</button>
+      <div class="button-group">
+        <button id="prev-from-mc" class="action-btn">Step Back</button>
+        <button id="next-from-mc" class="action-btn">Next Step</button>
+        <button id="comment-mc" class="action-btn small-btn">Add Comment</button>
+      </div>
       <div class="error" id="error-mc"></div>
     </section>
 
@@ -58,15 +64,15 @@
       <h2>Customization</h2>
       <label>Breed List (comma-separated):</label>
       <input type="text" id="custom-breeds" placeholder="e.g., Angus, Hereford, Charolais" />
-      <button id="save-breeds">Save Breeds</button>
+      <button id="save-breeds" class="action-btn">Save Breeds</button>
       <label>Language:</label>
       <select id="language-selector">
         <option value="English">English</option>
         <option value="Español">Español</option>
       </select>
-      <button id="save-language">Save Language</button>
-      <button id="download-data">Download Data</button>
-      <button id="prev-from-custom">Step Back</button>
+      <button id="save-language" class="action-btn">Save Language</button>
+      <button id="download-data" class="action-btn">Download Data</button>
+      <button id="prev-from-custom" class="action-btn">Step Back</button>
     </section>
   </div>
 
@@ -90,20 +96,3 @@
     <div class="keyboard-row">
       <button class="key">0</button>
       <button class="key" id="key-delete">Del</button>
-      <button class="key" id="key-enter">Enter</button>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
-  <script>
-    // Register the service worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').then(reg => {
-          console.log('ServiceWorker registered with scope:', reg.scope);
-        }).catch(err => console.error('ServiceWorker registration failed:', err));
-      });
-    }
-  </script>
-</body>
-</html>
